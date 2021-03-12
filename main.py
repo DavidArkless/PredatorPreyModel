@@ -1,5 +1,3 @@
-
-
 import predatorpreymodel as model
 import drawgraphs
 import modelparams
