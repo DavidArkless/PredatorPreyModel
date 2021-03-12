@@ -9,16 +9,16 @@ def main():
 
     time = np.linspace(0, 100, num=1000)
 
-    alpha = 2 / 3  # Prey Reproduction rate
-    beta = 4 / 3  # Predation rate
-    delta = 1  # Predator Reproduction/ food rate
-    gamma = 1  # Competition Rate
+    ALPHA = 2 / 3  # Prey Reproduction rate
+    BETA = 4 / 3  # Predation rate
+    DELTA = 1  # Predator Reproduction/ food rate
+    GAMMA = 1  # Competition Rate
 
     parameters = {
-        "alpha": alpha,  # Prey Reproduction rate
-        "beta": beta,  # Predation rate
-        "gamma": gamma,  # Predator Reproduction/ food rate
-        "delta": delta  # Competition Rate
+        "alpha": ALPHA,  # Prey Reproduction rate
+        "beta": BETA,  # Predation rate
+        "gamma": GAMMA,  # Predator Reproduction / food rate
+        "delta": DELTA  # Competition Rate
     }
 
     initial_values = [[0.9, 0.9], [1, 1], [1.1, 1.1], [1.2, 1.2]]
