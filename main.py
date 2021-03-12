@@ -7,7 +7,7 @@ def main():
     results = list()
 
     for i, vals in enumerate(modelparams.initial_values):
-        result = model.PredatorPreyModel(vals, modelparams.time, modelparams.parameters)
+        result = model.PredatorPreyModel(vals, modelparams.time, modelparams.parameters, modelparams.dxdt, modelparams.dydt)
 
         results.append(result)
 

@@ -17,3 +17,17 @@ parameters = {
 initial_values = [[0.9, 0.9], [1, 1], [1.1, 1.1], [1.2, 1.2]]
 
 time = np.linspace(0, 100, num=1000)
+
+
+def dxdt(x, y, params):
+
+    prey = params['alpha'] * x - params['beta'] * x * y
+
+    return prey
+
+
+def dydt(x, y, params):
+
+    predator = params['delta'] * x * y - params['gamma'] * y
+
+    return predator

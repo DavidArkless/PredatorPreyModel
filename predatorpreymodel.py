@@ -28,9 +28,14 @@ class PredatorPreyModel:
             "gamma": GAMMA,  # Predator Reproduction / food rate
             "delta": DELTA  # Competition Rate
              }
+        dxdt: Function
+            A function that returns a number from the y0[0], y0[2] and params passed into the function returning the
+            value for prey
 
-        model: list
-            This list contains the two equations that model the population of the predator and prey
+        dydt: Function
+            A function that returns a number from the y0[0], y0[2] and params passed into the function returning the
+            value for predators
+
 
         solution: numpy.ndarray
             Solution is a numpy.ndarray which is a list containing all the values of the population of predator and
@@ -42,29 +47,37 @@ class PredatorPreyModel:
              second fixed pot: [n,m] (oscillations)
 
     Methods:
-        model_equations(p, params)
-            Static Method
-            Used as a helper function to solve for the fixed points which is why it needs the parameter t
-            returns the model equations as a list
+
+        solve_model(self)
+            Finds the solution to the model equations using the helper function
+            solve_model_helper(y0, t, params, dxdt,dydt)
+            Returns a list of solutions
+
 
         get_fixed_points(self)
             returns the solution for the fixed points i.e. when dxdt = 0 and dydt = 0
 
-        model(y0, t, params)
+
+
+
+        get_fixed_points_helper(p, params, dxdt, dydt)
+            Static Method
+            This is a helper function to solve for the fixed points which is why it needs the parameter t
+            returns the model equations as a list
+
+
+        solve_model_helper(y0, t, params, dxdt, dydt)
             This also returns the model similarly to model_equation, however is used as a helper function to solve
             for the solutions of the model equations
             returns the model equations
 
-        solve_model(self)
-            Finds the solution to the model equations using the helper function model(y0, t, params)
-            Returns a list of solutions
 
 
 
 
     """
 
-    def __init__(self, y0, t, params):
+    def __init__(self, y0, t, params, dxdt, dydt):
 
         """
 
@@ -79,7 +92,8 @@ class PredatorPreyModel:
         self.y0 = y0
         self.t = t
         self.params = params
-        self.model = PredatorPreyModel.model(self.y0, self.t, self.params)
+        self.dxdt = dxdt
+        self.dydt = dydt
         self.solution = self.solve_model()
         self.fixedPoints = self.get_fixed_points()
 
@@ -90,14 +104,13 @@ class PredatorPreyModel:
                f"\nbeta : {self.params['beta']}\ndelta: {self.params['delta']}\ngamma: {self.params['gamma']}" \
                f"\nthe solution to the model is {self.solution} and the fixed points are {self.fixedPoints}"
 
-    @staticmethod
-    def model_equations(p, params):
 
-        x, y = p
-        dxdt = params['alpha'] * x - params['beta'] * x * y
-        dydt = params['delta'] * x * y - params['gamma'] * y
 
-        return dxdt, dydt
+    def solve_model(self):
+
+        solution = odeint(PredatorPreyModel.solve_model_helper, self.y0, self.t, args=(self.params, self.dxdt, self.dydt))
+
+        return solution
 
     def get_fixed_points(self):
 
@@ -110,7 +123,8 @@ class PredatorPreyModel:
 
             initialGuess = np.array([i, i])
 
-            solution = fsolve(PredatorPreyModel.model_equations, initialGuess, args=(self.params,))
+            solution = fsolve(PredatorPreyModel.get_fixed_points_helper, initialGuess, args=(self.params, self.dxdt,
+                                                                                             self.dydt))
 
             solution = np.ndarray.tolist(solution)
 
@@ -119,21 +133,28 @@ class PredatorPreyModel:
 
         return fixedPoints
 
+
+
+
     @staticmethod
-    def model(y0, t, params):
+    def get_fixed_points_helper(p, params, dxdt, dydt):
+
+        x, y = p
+        dxdt = dxdt(x, y, params)
+        dydt = dydt(x, y, params)
+
+        return dxdt, dydt
+
+    @staticmethod
+    def solve_model_helper(y0, t, params, dxdt, dydt):
 
         x = y0[0]
         y = y0[1]
 
-        dxdt = params['alpha'] * x - params['beta'] * x * y
-        dydt = params['delta'] * x * y - params['gamma'] * y
+        dxdt = dxdt(x, y, params)
+        dydt = dydt(x, y, params)
 
         model = [dxdt, dydt]
 
         return model
 
-    def solve_model(self):
-
-        solution = odeint(PredatorPreyModel.model, self.y0, self.t, args=(self.params,))
-
-        return solution
