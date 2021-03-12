@@ -83,12 +83,6 @@ class PredatorPreyModel:
         self.solution = self.solve_model()
         self.fixedPoints = self.get_fixed_points()
 
-        print(type(self.y0))
-        print(type(self.t))
-        print(type(self.params))
-        print(type(self.model))
-        print(type(self.solution))
-        print(type(self.fixedPoints))
 
 
     def __str__(self):
