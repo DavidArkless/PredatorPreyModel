@@ -82,12 +82,19 @@ class PredatorPreyModel:
         """
 
         :param y0:
-            The initial values of the population of predator and prey in the format [prey, predator]
+            The initial values of the population of prey and predator in the format [prey, predator]
+
         :param t:
             A list of time, that is evenly spaced over a specific interval
 
         :param params:
             A dictionary that contains the parameters needed to model the predator and prey population
+
+        :param dxdt:
+            A function that contains the formula used to model the moose population
+
+        :param dydt:
+            A function that contains the formula used to model the wolves population
         """
         self.y0 = y0
         self.t = t
