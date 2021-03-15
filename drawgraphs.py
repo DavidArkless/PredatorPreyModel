@@ -1,8 +1,13 @@
 import matplotlib.pyplot as plt
+import os
 plt.style.use('ggplot')
 
 
 def draw_prey_predator_graphs(data):
+
+    if not os.path.exists("graphs"):
+        os.makedirs("graphs")
+
     for index, modelData in enumerate(data):
         preyLine = plt.plot(modelData.t, modelData.solution[:, 0], label="prey")
         predatorLine = plt.plot(modelData.t, modelData.solution[:, 1], label="predator")

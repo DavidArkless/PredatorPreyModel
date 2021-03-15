@@ -14,7 +14,7 @@ parameters = {
     "delta": DELTA  # Competition Rate
 }
 
-initial_values = [[0.9, 0.9], [1, 1], [1.1, 1.1], [1.2, 1.2]]
+initial_values = [[0.9, 0.9], [1, 1], [1.1, 1.1], [1.2, 1.2]] # [prey population, predator population] (Hundreds)
 
 time = np.linspace(0, 100, num=1000)
 
