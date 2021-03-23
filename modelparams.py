@@ -2,6 +2,16 @@ import numpy as np
 
 
 
+def alpha_sin(x):
+    A = 10000
+    K = 1
+
+    food_rate = A * np.sin(K * x) + 2 * A
+
+    return food_rate
+
+
+
 ALPHA = 2 / 3  # Prey Reproduction rate
 BETA = 4 / 3  # Predation rate
 DELTA = 1  # Predator Reproduction/ food rate
