@@ -1,33 +1,37 @@
 import numpy as np
 
 
-K_PREY = 1500
-PREY_GROWTH = 2
-
-K_PREDATOR = 46
-PREDATOR_GROWTH = 0.2
-
-PREDATION_RATE = 0.02
-COMPETITION_RATE = 0.05
-
+A = 0.23
+B = 0.00001
+C = 0.82
+G = 0.53
+M = 0.7
 
 
 parameters = {
-    "prey_max": K_PREY,  # Maximum number of prey
-    "predator_max": K_PREDATOR,  # Maximum number of predators
-    "prey_growth": PREY_GROWTH, # Reproduction rate of prey
-    "predator_growth": PREDATOR_GROWTH, # Reproduction rate of predator
-    "predation_rate": PREDATION_RATE,
-    "competition_rate": COMPETITION_RATE,
+    "A": A,
+    "B": B,
+    "C": C,
+    "G": G,
+    "M": M,
 }
 
 """
-Logistic Growth model
+Arditi-Ginzburg
 
-dx/dt = rx(1 - x/K)
+dx/dt = x(A - Bx) - Cxy/(x+y)
 
-when x is smaller than K 1 - x / K = 1
-When x -> K, (1 - x/K) -> 0
+dy/dt = -Gy + Mxy/(x+y)
+
+A,B: controls the growth of the prey w/o predator
+
+C controls how fast the predator consumes the prey
+
+G controls how fast the predator dies w/o prey
+
+M controls how fast the predator grows with maximum prey
+
+
 
 Need to some how link the growth of prey 
 and predators so that they affect each other
@@ -36,16 +40,13 @@ and predators so that they affect each other
 
 initial_values = [[400, 28]]
 
-time = np.linspace(0, 100, num=1000)
+time = np.linspace(0, 150, num=100000)
 
 
 def dxdt(prey_pop, predator_pop, params):
 
-    logistic_growth = (params['prey_growth'] * prey_pop * (1 - prey_pop / params['prey_max']))
-
-    logistic_decay = 0
-
-    prey = logistic_growth - abs(logistic_decay)
+    prey = prey_pop * (params['A'] - params['B'] * prey_pop) - params['C'] \
+           * prey_pop * predator_pop / (prey_pop + predator_pop)
 
 
     return prey
@@ -53,10 +54,6 @@ def dxdt(prey_pop, predator_pop, params):
 
 def dydt(prey_pop, predator_pop, params):
 
-    logistic_growth = (params['predator_growth'] * predator_pop * (1 - predator_pop / params['predator_max']))
-
-    logistic_decay = 0
-
-    predator = logistic_growth - abs(logistic_decay)
+    predator = - params['G'] * predator_pop + params['M'] * prey_pop * predator_pop / (prey_pop + predator_pop)
 
     return predator
