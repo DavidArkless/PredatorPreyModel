@@ -12,19 +12,19 @@ def alpha_sin(x):
 
 
 
-ALPHA = 2 / 3  # Prey Reproduction rate
-BETA = 4 / 3  # Predation rate
-DELTA = 1  # Predator Reproduction/ food rate
-GAMMA = 1  # Competition Rate
+ALPHA = 0.4   # Prey Reproduction rate
+BETA = 0.07 / 4  # Predation rate
+DELTA = 0.005 / 4  # Predator Reproduction/ food rate
+GAMMA = 0.3 * 4 # Competition Rate
 
 parameters = {
     "alpha": ALPHA,  # Prey Reproduction rate
     "beta": BETA,  # Predation rate
-    "gamma": GAMMA,  # Predator Reproduction / food rate
-    "delta": DELTA  # Competition Rate
+    "delta": DELTA,  # Predator Reproduction / food rate
+    "gamma": GAMMA,  # Competition Rate
 }
 
-initial_values = [[0.9, 0.9], [1, 1], [1.1, 1.1], [1.2, 1.2]]
+initial_values = [[400, 28]]
 
 time = np.linspace(0, 100, num=1000)
 
