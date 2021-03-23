@@ -1,43 +1,47 @@
 import numpy as np
 
 
+K_PREY = 1500
+PREYGROWTH = 2
 
-def alpha_sin(x):
-    A = 10000
-    K = 1
-
-    food_rate = A * np.sin(K * x) + 2 * A
-
-    return food_rate
+K_PREDATOR = 46
+PREDATORGROWTH = 2
 
 
-
-ALPHA = 2 / 3  # Prey Reproduction rate
-BETA = 4 / 3  # Predation rate
-DELTA = 1  # Predator Reproduction/ food rate
-GAMMA = 1  # Competition Rate
 
 parameters = {
-    "alpha": ALPHA,  # Prey Reproduction rate
-    "beta": BETA,  # Predation rate
-    "gamma": GAMMA,  # Predator Reproduction / food rate
-    "delta": DELTA  # Competition Rate
+    "prey_max": K_PREY,  # Maximum number of prey
+    "predator_max": K_PREDATOR,  # Maximum number of predators
+    "prey_growth": PREYGROWTH, # Reproduction rate of prey
+    "predator_growth": PREDATORGROWTH, # Reproduction rate of predator
 }
 
-initial_values = [[0.9, 0.9], [1, 1], [1.1, 1.1], [1.2, 1.2]]
+"""
+Logistic Growth model
 
-time = np.linspace(0, 100, num=1000)
+dx/dt = rx(1 - x/K)
+
+when x is smaller than K 1 - x / K = 1
+When x -> K, (1 - x/K) -> 0
+
+Need to some how link the growth of prey and predators
+
+"""
+
+initial_values = [[400, 28]]
+
+time = np.linspace(0, 25, num=1000)
 
 
 def dxdt(x, y, params):
 
-    prey = params['alpha'] * x - params['beta'] * x * y
+    prey = (params['prey_growth'] * x * (1 - x / params['prey_max']))
 
     return prey
 
 
 def dydt(x, y, params):
 
-    predator = params['delta'] * x * y - params['gamma'] * y
+    predator = (params['predator_growth'] * y * (1 - y / params['predator_max']))
 
     return predator
